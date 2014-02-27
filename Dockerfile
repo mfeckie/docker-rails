@@ -11,7 +11,13 @@ RUN wget http://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.1.tar.gz -q \
 
 RUN rm -rf ruby-2.1.1 && rm ruby-2.1.1.tar.gz
 
-RUN apt-get install -y redis-server && apt-get clean
-ADD redis.sh /etc/my_init.d/
-RUN /etc/init.d/redis-server start
+RUN wget http://download.redis.io/releases/redis-2.8.6.tar.gz -q\
+	&& tar xvf redis-2.8.6.tar.gz \
+	&& cd redis-2.8.6 \
+	&& make \
+	&& sudo make install \
+	&& cd utils \
+	&& ./install_server.sh \
+	&& sudo service redis_6379 start
 
+RUN rm -rf redis-2.8.6 && rm redis-2.8.6.tar.gz
